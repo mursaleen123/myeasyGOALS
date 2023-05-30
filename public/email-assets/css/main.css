@@ -1,0 +1,378 @@
+/* Css reset  */
+html,
+body,
+div,
+span,
+applet,
+object,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+a,
+abbr,
+acronym,
+address,
+big,
+cite,
+code,
+del,
+dfn,
+em,
+img,
+ins,
+kbd,
+q,
+s,
+samp,
+small,
+strike,
+strong,
+sub,
+sup,
+tt,
+var,
+b,
+u,
+i,
+center,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+fieldset,
+form,
+label,
+legend,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td,
+article,
+aside,
+canvas,
+details,
+embed,
+figure,
+figcaption,
+footer,
+header,
+hgroup,
+menu,
+nav,
+output,
+ruby,
+section,
+summary,
+time,
+mark,
+audio,
+video {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    font: inherit;
+    vertical-align: baseline;
+    font-family: "Sharp Grotesk DB Cyr Medium 20", sans-serif;
+    font-family: "Suisse Int'l", sans-serif;
+}
+
+/* HTML5 display-role reset for older browsers */
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+menu,
+nav,
+section {
+    display: block;
+}
+
+body {
+    font-family: "Poppins", sans-serif;
+    font-size: 14px;
+    line-height: 17px;
+    color: #000;
+}
+
+ol,
+ul {
+    list-style: none;
+}
+
+blockquote,
+q {
+    quotes: none;
+}
+
+blockquote:before,
+blockquote:after,
+q:before,
+q:after {
+    content: "";
+    content: none;
+}
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+/* css reset end  */
+
+/* header css  */
+
+.header {
+    background: #ffffff;
+    box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.25);
+}
+
+.header-actions a {
+    font-family: "Sharp Grotesk DB Cyr Medium 20", sans-serif;
+    font-size: 18px;
+    text-decoration: none;
+    text-align: center;
+}
+
+.header-actions a span {
+    display: block;
+}
+
+.header-actions a.active .active-icon {
+    display: block;
+}
+
+.header-actions a.active .unactive-icon {
+    display: none;
+}
+
+.header-actions a .active-icon {
+    display: none;
+}
+
+.header-alphas {
+    background-color: #ffffff;
+    width: auto;
+    padding-bottom: 10px;
+}
+
+.alpha-img {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-top: 10px;
+}
+
+.alpha-bg {
+    background-color: rgba(110, 224, 222, 1);
+    width: 100%;
+}
+
+.registration-form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 50px 0;
+}
+
+.form-alpha {
+    /* height: 72vh; */
+    width: 70%;
+    background-color: rgba(245, 255, 255, 1);
+    box-shadow: 0px 4px 27px rgba(0, 0, 0, 0.14);
+    border-radius: 10px;
+}
+
+.card-text {
+    font-family: "Poppins";
+    font-style: normal;
+    color: #2c312c;
+    text-align: justify;
+    font-size: 38px;
+    line-height: 30px;
+    font-weight: 600;
+    margin-bottom: 43px;
+}
+
+.input-field {
+    border: none;
+    padding: 10px 10px 10px 40px;
+    position: relative;
+    background: #ffffff;
+    border: 0.8px solid #9a999b;
+    border-radius: 6px;
+}
+
+/* .inputs-tag
+{
+  display: flex;
+  background: #FFFFFF;
+border: 0.8px solid #9A999B;
+border-radius: 6px;
+height: 6vh;
+} */
+
+.form-group .icon-box {
+    width: 20px;
+}
+
+.form-group .icon-box {
+    width: 20px;
+    display: inline-block;
+    position: absolute;
+    top: 12px;
+    left: 20px;
+    z-index: 99;
+}
+
+.form-group {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.input-field:focus {
+    border: 1px solid #9a999b;
+    outline: 0;
+    box-shadow: none;
+}
+
+.register-btn-div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.register-btn {
+    background: #6ee0de;
+    border-radius: 8px;
+    color: #000000;
+    width: 40%;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 16px;
+    text-align: center;
+    margin-bottom: 20px;
+    border-color: #6ee0de;
+}
+
+.alphas-card-body {
+    /* padding: 50px 50px 130px; */
+    padding: 50px;
+}
+
+input[type="date"]:invalid+span:after {
+    content: "Grad Year";
+    position: absolute;
+    left: 51px;
+    top: 17px;
+    font-size: 17px;
+    color: #899097;
+}
+
+input[type="date"]:focus:invalid+span:after {
+    display: none;
+}
+
+input:not(:focus):invalid {
+    color: transparent;
+}
+
+input[type="date"]::after {
+    position: absolute;
+    content: "";
+    font-family: "Font Awesome 6 Free";
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+    color: transparent;
+    background: none;
+    z-index: 1;
+}
+
+.login-link {
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    gap: 10px;
+}
+
+.login-link p {
+    font-family: "Montserrat";
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 14px;
+    color: #767f88;
+}
+
+.login-link a {
+    font-family: "Montserrat";
+    font-style: normal;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 14px;
+    color: #2c312c;
+}
+
+.form-group i.fa-chevron-down {
+    position: absolute;
+    right: 7%;
+    top: 40%;
+}
+
+@media screen and (max-width: 412px) {
+    .form-alpha {
+        width: auto;
+    }
+
+    .alpha-bg {
+        width: auto;
+    }
+}
+
+@media screen and (max-width: 375px) {
+    .form-alpha {
+        height: auto;
+        width: auto;
+    }
+
+    .alphas-card-body {
+        padding: 13px;
+    }
+}
+
+@media screen and (max-width: 414px) {
+    .form-alpha {
+        width: auto;
+    }
+}
+
+@media screen and (max-width: 428px) {
+    .form-alpha {
+        width: auto;
+    }
+}
+
+@media screen and (max-width: 810px) {
+    .form-alpha {
+        margin: 10px 30px 40px;
+        width: auto;
+    }
+}
