@@ -157,9 +157,9 @@
         const toggle = document.getElementById('toggle');
         toggle.addEventListener('change', function() {
             if (this.checked) {
-                this.value = '0';
-            } else {
                 this.value = '1';
+            } else {
+                this.value = '0';
             }
         });
     </script>

@@ -57,4 +57,8 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::get('/admin/user-guide}', [App\Http\Controllers\UserGuideController::class,'index'])->name('userguide.index');
     Route::post('/change-and-update/user-guide}', [App\Http\Controllers\UserGuideController::class,'storeAndUpdate'])->name('userguide.storeAndUpdate');
+
+
+    Route::get('/admin/disclaimer}', [App\Http\Controllers\DisclaimerController::class,'index'])->name('disclaimer.index');
+    Route::post('/change-and-update/disclaimer}', [App\Http\Controllers\DisclaimerController::class,'storeAndUpdate'])->name('disclaimer.storeAndUpdate');
 });

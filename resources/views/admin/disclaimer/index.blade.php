@@ -13,7 +13,7 @@
                     <div class="card-header border-0 pt-6">
                         <!--begin::Card title-->
                         <div class="card-title">
-                            User Guide
+                            Disclaimer
                         </div>
                         <!--End::Card title-->
                         <!--begin::Card toolbar-->
@@ -63,7 +63,7 @@
                     </div>
                     <!--end::Card header-->
                     {!! Form::open([
-                        'route' => 'userguide.storeAndUpdate',
+                        'route' => 'disclaimer.storeAndUpdate',
                         'method' => 'POST',
                         'class' => 'w-100 position-relative mb-3',
                     ]) !!}
@@ -76,7 +76,7 @@
                                 <!--begin::Label-->
 
                                 {{-- <label class="col-lg-12 col-form-label required fw-bold fs-6">Answer:</label> --}}
-                                {!! Form::textarea('user_guide', $guide->user_guide, [
+                                {!! Form::textarea('disclaimer', $disclaimer->disclaimer, [
                                     'placeholder' => '',
                                     'class' => 'form-control tinymce-editor',
                                     'id' => 'myTextarea',
@@ -108,24 +108,7 @@
     <!--end::Content-->
     <script>
         $(document).ready(function() {
-            $("#UserGuide").addClass('show');
-        });
-    </script>
-    <script type="text/javascript">
-        tinymce.init({
-            selector: 'textarea.tinymce-editor',
-            height: 100,
-            menubar: false,
-            plugins: [
-                'advlist autolink lists link image charmap print preview anchor',
-                'searchreplace visualblocks code fullscreen',
-                'insertdatetime media table paste code help wordcount'
-            ],
-            toolbar: 'undo redo | formatselect | ' +
-                'bold italic backcolor | alignleft aligncenter ' +
-                'alignright alignjustify | bullist numlist outdent indent | ' +
-                'removeformat | help',
-            content_css: '//www.tiny.cloud/css/codepen.min.css'
+            $("#disclaimer").addClass('show');
         });
     </script>
 @endsection

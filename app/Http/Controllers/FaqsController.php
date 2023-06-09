@@ -23,13 +23,15 @@ class FaqsController extends Controller
     {
 
         // Validate the request data
-        $validatedData = $request->validate([
+        $request->validate([
             'question' => 'required',
             'answer' => 'required',
         ]);
 
+        $collection = $request->except(['_token']);
+
         // Create a new Faq instance with the validated data
-        Faqs::create($validatedData);
+        Faqs::create($collection);
 
         // Redirect back with success message
         return redirect()->route('get.faq.index')->with('success', 'Faq created successfully');
