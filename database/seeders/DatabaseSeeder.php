@@ -21,6 +21,7 @@ class DatabaseSeeder extends Seeder
             RolesTableSeeder::class,
             DefaultPermissionSeeder::class,
             FaqSeeder::class,
+            Disclaimer::class,
         ]);
     }
 }
