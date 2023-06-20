@@ -6,8 +6,8 @@
     <!--begin::Brand-->
     <div class="aside-logo flex-column-auto" id="kt_aside_logo">
         <!--begin::Logo-->
-        <a href="{{ route('index') }}" style="text-decoration: none; color:#fff;">
-            <h1 style="color:#fff;">{{ config('app.name') }}</h1>
+        <a href="<?php echo e(route('index')); ?>" style="text-decoration: none; color:#fff;">
+            <h1 style="color:#fff;"><?php echo e(config('app.name')); ?></h1>
         </a>
         <!--end::Logo-->
     </div>
@@ -24,7 +24,7 @@
             <div class="menu menu-column menu-title-gray-800 menu-state-title-primary menu-state-icon-primary menu-state-bullet-primary menu-arrow-gray-500"
                 id="#kt_aside_menu" data-kt-menu="true">
                 <div class="menu-item">
-                    <a class="menu-link" href="{{ route('dashboard') }}" id="dashboardNav">
+                    <a class="menu-link" href="<?php echo e(route('dashboard')); ?>" id="dashboardNav">
                         <span class="menu-icon">
                             <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
                             <span class="svg-icon svg-icon-2">
@@ -77,7 +77,7 @@
                             </a>
                         </div>
                         <div class="menu-item">
-                            <a class="menu-link" id="showbannerNav" href="{{ route('banners.index') }}">
+                            <a class="menu-link" id="showbannerNav" href="<?php echo e(route('banners.index')); ?>">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
@@ -87,7 +87,7 @@
                     </div>
                 </div>
                 <div class="menu-item">
-                    <a class="menu-link" href="{{ route('userguide.index') }}" id="UserGuide">
+                    <a class="menu-link" href="<?php echo e(route('userguide.index')); ?>" id="UserGuide">
                         <span class="menu-icon">
                             <!--begin::Svg Icon | path: icons/duotune/communication/com013.svg-->
                             <span class="svg-icon svg-icon-2">
@@ -120,7 +120,7 @@
                     </span>
                     <div class="menu-sub menu-sub-accordion menu-active-bg">
                         <div class="menu-item">
-                            <a class="menu-link" id="addFaq" href="{{ route('get.faq.form') }}">
+                            <a class="menu-link" id="addFaq" href="<?php echo e(route('get.faq.form')); ?>">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
@@ -130,7 +130,7 @@
                     </div>
                     <div class="menu-sub menu-sub-accordion menu-active-bg">
                         <div class="menu-item">
-                            <a class="menu-link" id="allFaq" href="{{ route('get.faq.index') }}">
+                            <a class="menu-link" id="allFaq" href="<?php echo e(route('get.faq.index')); ?>">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
@@ -140,7 +140,7 @@
                     </div>
                 </div>
                 <div class="menu-item">
-                    <a class="menu-link" href="{{ route('disclaimer.index') }}" id="disclaimer">
+                    <a class="menu-link" href="<?php echo e(route('disclaimer.index')); ?>" id="disclaimer">
                         <span class="menu-icon">
                             <!--begin::Svg Icon | path: icons/duotune/communication/com013.svg-->
                             <span class="svg-icon svg-icon-2">
@@ -161,7 +161,7 @@
                         <span class="menu-title">Disclaimer</span>
                     </a>
                 </div>
-                @if (Gate::check('role-list') || Gate::check('role-create') || Gate::check('role-edit') || Gate::check('role-delete'))
+                <?php if(Gate::check('role-list') || Gate::check('role-create') || Gate::check('role-edit') || Gate::check('role-delete')): ?>
                     <div data-kt-menu-trigger="click" class="menu-item menu-accordion" id="roleNav">
                         <span class="menu-link">
                             <span class="menu-icon">
@@ -187,32 +187,32 @@
                             <span class="menu-arrow"></span>
                         </span>
                         <div class="menu-sub menu-sub-accordion menu-active-bg">
-                            @can('role-create')
+                            <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('role-create')): ?>
                                 <div class="menu-item">
-                                    <a class="menu-link" id="addRoleNav" href="{{ route('roles.create') }}">
+                                    <a class="menu-link" id="addRoleNav" href="<?php echo e(route('roles.create')); ?>">
                                         <span class="menu-bullet">
                                             <span class="bullet bullet-dot"></span>
                                         </span>
                                         <span class="menu-title">Add New</span>
                                     </a>
                                 </div>
-                            @endcan
-                            @can('role-list')
+                            <?php endif; ?>
+                            <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('role-list')): ?>
                                 <div class="menu-item">
-                                    <a class="menu-link" id="showRoleNav" href="{{ route('roles.index') }}">
+                                    <a class="menu-link" id="showRoleNav" href="<?php echo e(route('roles.index')); ?>">
                                         <span class="menu-bullet">
                                             <span class="bullet bullet-dot"></span>
                                         </span>
                                         <span class="menu-title">View All</span>
                                     </a>
                                 </div>
-                            @endcan
+                            <?php endif; ?>
                         </div>
                     </div>
-                @endif
+                <?php endif; ?>
 
                 <div class="menu-item">
-                    <a class="menu-link" href="{{ route('edit-profile', Auth::user()->id) }}" id="profileNav">
+                    <a class="menu-link" href="<?php echo e(route('edit-profile', Auth::user()->id)); ?>" id="profileNav">
                         <span class="menu-icon">
                             <!--begin::Svg Icon | path: icons/duotune/communication/com013.svg-->
                             <span class="svg-icon svg-icon-2">
@@ -238,3 +238,4 @@
     <!--end::Aside menu-->
 </div>
 <!--end::Aside-->
+<?php /**PATH C:\xampp\htdocs\myeasyGOALS\resources\views/components/admin/admin-nav.blade.php ENDPATH**/ ?>

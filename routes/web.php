@@ -61,4 +61,9 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::get('/admin/disclaimer}', [App\Http\Controllers\DisclaimerController::class,'index'])->name('disclaimer.index');
     Route::post('/change-and-update/disclaimer}', [App\Http\Controllers\DisclaimerController::class,'storeAndUpdate'])->name('disclaimer.storeAndUpdate');
+
+    Route::get('/admin/banners}', [App\Http\Controllers\BannersController::class,'index'])->name('banners.index');
+    Route::get('/admin/create-banners}', [App\Http\Controllers\BannersController::class,'create'])->name('banners.create');
+    Route::post('/admin/store-banners}', [App\Http\Controllers\BannersController::class,'store'])->name('banners.store');
+
 });
