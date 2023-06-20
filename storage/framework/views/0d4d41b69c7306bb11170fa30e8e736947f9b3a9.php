@@ -58,7 +58,12 @@
                         <!--end::Card toolbar-->
                     </div>
                     <!--end::Card header-->
-                    <?php echo Form::open(['route' => 'banners.store', 'method' => 'POST', 'class' => 'w-100 position-relative mb-3']); ?>
+                    <?php echo Form::open([
+                        'route' => 'banners.store',
+                        'method' => 'POST',
+                        'class' => 'w-100 position-relative mb-3',
+                        'enctype' => 'multipart/form-data',
+                    ]); ?>
 
                     <!--begin::Card body-->
                     <div class="card-body pt-0">
@@ -69,7 +74,7 @@
                                 <!--begin::Label-->
                                 <label class="col-lg-12 col-form-label required fw-bold fs-6">Select Banner Image:</label>
                                 <!--end::Label-->
-                                <?php echo Form::file('banner_image', null, ['placeholder' => '', 'class' => 'form-control']); ?>
+                                <?php echo Form::file('banner_image[]', ['multiple' => 'true', 'class' => 'form-control']); ?>
 
                             </div>
                             <!--end::Col-->

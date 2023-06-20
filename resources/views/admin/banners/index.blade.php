@@ -125,21 +125,26 @@
                                         <tr class="text-start text-muted fw-bolder fs-7 text-uppercase gs-0">
                                             <th>No</th>
                                             <th>Image</th>
-                                            <th>Name</th>
                                             <th>Action</th>
                                         </tr>
                                         <!--end::Table row-->
                                     </thead>
                                     <!--end::Table head-->
-                                    <tr>
-                                        <td>1</td>
-                                        <td><img src="{{asset('admin/assets/media/books/1.png')}}" width="100" height="100"></td>
-                                        <td>ABc</td>
-                                        <td><a href="#" class="badge badge-info mr-2">Edit</a><a href="#" class="ml-2 badge badge-danger">Delete</a></td>
-                                    </tr>
+
+
                                     <!--begin::Table body-->
                                     <tbody class="text-gray-600 fw-bold">
+                                        @foreach ($banners as $key => $banner)
+                                            <tr>
+                                                <td>{{ $key + 1 }}</td>
+                                                <td>
+                                                    <img src="{{ asset('/admin/assets/Banners/'.$banner->image_path )    }}" width="100"
+                                                        height="100"></td>
 
+                                                <td><a href="#" class="badge badge-info mr-2">Edit</a><a href="#"
+                                                        class="ml-2 badge badge-danger">Delete</a></td>
+                                            </tr>
+                                        @endforeach
                                     </tbody>
                                     <!--end::Table body-->
                                 </table>
