@@ -70,7 +70,7 @@
                             <!--begin::Wrapper-->
                             <div class="d-flex flex-stack mb-2">
                                 <!--begin::Label-->
-                                <label class="form-label fw-bolder text-dark fs-6 mb-0">{{ __('Password Enter') }}</label>
+                                <label class="form-label fw-bolder text-dark fs-6 mb-0">{{ __('Password') }}</label>
                                 <!--end::Label-->
                                 <!--begin::Link-->
                                 @if (Route::has('password.request'))
