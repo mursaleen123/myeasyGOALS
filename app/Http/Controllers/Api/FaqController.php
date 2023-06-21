@@ -12,17 +12,17 @@ class FaqController extends Controller
     {
         // dd(auth()->user());
         // $this->middleware('auth:api');
-        $user = $request->user(); // Get the authenticated user
+        // $user = $request->user(); // Get the authenticated user
 
-        if ($user) {
-            dd(12);
-            // User is logged in
-            // You can perform actions for the logged-in user
-        } else {
-            dd('not');
-            // User is not logged in
-            // You can handle the case where the user is not authenticated
-        }
+        // if ($user) {
+        //     dd(12);
+        //     // User is logged in
+        //     // You can perform actions for the logged-in user
+        // } else {
+        //     dd('not');
+        //     // User is not logged in
+        //     // You can handle the case where the user is not authenticated
+        // }
 
 
         $faqs = Faqs::where('is_active','true')->orderBy('id', 'DESC')->get();
