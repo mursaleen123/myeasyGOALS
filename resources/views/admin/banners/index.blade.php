@@ -138,11 +138,16 @@
                                             <tr>
                                                 <td>{{ $key + 1 }}</td>
                                                 <td>
-                                                    <img src="{{ asset('/admin/assets/Banners/'.$banner->image_path )    }}" width="100"
-                                                        height="100"></td>
+                                                    <img src="{{ asset('/admin/assets/Banners/' . $banner->image_path) }}"
+                                                        width="100" height="100">
+                                                </td>
 
-                                                <td><a href="#" class="badge badge-info mr-2">Edit</a><a href="#"
-                                                        class="ml-2 badge badge-danger">Delete</a></td>
+                                                <td>
+                                                    <a href="{{ route('banners.edit', $banner->id) }}"
+                                                        class="badge badge-info mr-2">Edit</a>
+                                                    <a href="{{ route('banners.destroy', $banner->id) }}"
+                                                        class="ml-2 badge badge-danger">Delete</a>
+                                                </td>
                                             </tr>
                                         @endforeach
                                     </tbody>

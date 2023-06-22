@@ -1,5 +1,4 @@
-@extends('admin.layouts.app')
-@section('content')
+<?php $__env->startSection('content'); ?>
     <style>
         input[type="file"] {
             display: block;
@@ -25,23 +24,23 @@
         <div class="post d-flex flex-column-fluid" id="kt_post">
             <!--begin::Container-->
             <div id="kt_content_container" class="container-xxl">
-                @if (count($errors) > 0)
+                <?php if(count($errors) > 0): ?>
                     <div class="alert alert-danger">
                         <strong>Whoops!</strong> There were some problems with your input.<br><br>
                         <ul>
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
+                            <?php $__currentLoopData = $errors->all(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $error): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <li><?php echo e($error); ?></li>
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                         </ul>
                     </div>
-                @endif
+                <?php endif; ?>
                 <!--begin::Card-->
                 <div class="card">
                     <!--begin::Card header-->
                     <div class="card-header border-0 pt-6">
                         <!--begin::Card title-->
                         <div class="card-title">
-                            Create New Banner
+                            Update  Banner
                         </div>
                         <!--End::Card title-->
                         <!--begin::Card toolbar-->
@@ -49,7 +48,7 @@
                             <!--begin::Toolbar-->
                             <div class="d-flex justify-content-end" data-kt-user-table-toolbar="base">
                                 <!--begin::Add user-->
-                                <a href="{{ route('banners.index') }}" class="btn btn-primary">
+                                <a href="<?php echo e(route('banners.index')); ?>" class="btn btn-primary">
                                     Back
                                 </a>
                                 <!--end::Add user-->
@@ -59,12 +58,13 @@
                         <!--end::Card toolbar-->
                     </div>
                     <!--end::Card header-->
-                    {!! Form::open([
-                        'route' => 'banners.store',
+                    <?php echo Form::open([
+                        'route' => 'banners.update',
                         'method' => 'POST',
                         'class' => 'w-100 position-relative mb-3',
                         'enctype' => 'multipart/form-data',
-                    ]) !!}
+                    ]); ?>
+
                     <!--begin::Card body-->
                     <div class="card-body pt-0">
                         <!--begin::Input group-->
@@ -72,9 +72,12 @@
                             <!--begin::Col-->
                             <div class="col-lg-12 fv-row">
                                 <!--begin::Label-->
-                                <label class="col-lg-12 col-form-label required fw-bold fs-6">Select Banner Image:</label>
+                                <label class="col-lg-12 col-form-label required fw-bold fs-6">Update Banner Image:</label>
                                 <!--end::Label-->
-                                {!! Form::file('banner_image[]', ['multiple' => 'true', 'class' => 'form-control']) !!}
+                                <?php echo Form::text('banner_id',$Banners->id ,[ 'class' => 'form-control']); ?>
+
+                                <?php echo Form::file('banner_image', [ 'class' => 'form-control']); ?>
+
                             </div>
                             <!--end::Col-->
                         </div>
@@ -88,7 +91,8 @@
                         <button type="submit" class="btn btn-primary px-6">Save Changes</button>
                     </div>
                     <!--end::Card footer-->
-                    {!! Form::close() !!}
+                    <?php echo Form::close(); ?>
+
                 </div>
                 <!--end::Card-->
             </div>
@@ -99,18 +103,10 @@
     <!--end::Content-->
     <script>
         $(document).ready(function() {
-            $("#bannersNav").addClass('show');
-            $("#addbannerNav").addClass('active');
+            $("#FaqNav").addClass('show');
+            $("#addFaq").addClass('active');
         });
     </script>
-    <script>
-        const toggle = document.getElementById('toggle');
-        toggle.addEventListener('change', function() {
-            if (this.checked) {
-                this.value = '1';
-            } else {
-                this.value = '0';
-            }
-        });
-    </script>
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('admin.layouts.app', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\myeasyGOALS\resources\views/admin/banners/edit.blade.php ENDPATH**/ ?>

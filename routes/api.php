@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\BannerController;
 use App\Http\Controllers\Api\DisclaimerController;
 use App\Http\Controllers\Api\FaqController;
 use App\Http\Controllers\Api\ForgetPasswordController;
@@ -40,6 +41,7 @@ Route::group([
 
     // Route::group(['middleware' => 'auth'], function () {
     Route::get('/get-Faqs', [FaqController::class, 'FetchFaqs']);
+    Route::get('/get-banners', [BannerController::class, 'FetchBanners']);
     Route::get('/get-user-guide', [UserGuideController::class, 'FetchUserGuide']);
     Route::get('/get-disclaimer', [DisclaimerController::class, 'FetchDisclaimer']);
     // });

@@ -101,8 +101,8 @@
     <!--end::Content-->
     <script>
         $(document).ready(function() {
-            $("#FaqNav").addClass('show');
-            $("#addFaq").addClass('active');
+            $("#bannersNav").addClass('show');
+            $("#addbannerNav").addClass('active');
         });
     </script>
     <script>

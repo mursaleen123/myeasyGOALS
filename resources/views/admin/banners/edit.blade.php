@@ -1,38 +1,22 @@
 @extends('admin.layouts.app')
 @section('content')
     <style>
-        .toggle-input {
-            display: none;
-        }
+        input[type="file"] {
+            display: block;
+            width: 100%;
+            padding: 0.75rem 1rem;
+            font-size: 1.1rem;
+            font-weight: 500;
+            line-height: 1.5;
+            color: #181c32;
+            background-color: #fff;
+            background-clip: padding-box;
+            border: 1px solid #e4e6ef;
+            appearance: none;
+            border-radius: 0.475rem;
+            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.075);
+            transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 
-        .toggle-label {
-            display: inline-block;
-            width: 50px;
-            height: 30px;
-            background-color: gray;
-            border-radius: 15px;
-            position: relative;
-            cursor: pointer;
-        }
-
-        .toggle-input:checked+.toggle-label {
-            background-color: #009ef7;
-        }
-
-        .toggle-label:before {
-            content: '';
-            position: absolute;
-            width: 26px;
-            height: 26px;
-            border-radius: 50%;
-            background-color: white;
-            top: 2px;
-            left: 2px;
-            transition: 0.2s;
-        }
-
-        .toggle-input:checked+.toggle-label:before {
-            transform: translateX(20px);
         }
     </style>
     <!--begin::Content-->
@@ -57,7 +41,7 @@
                     <div class="card-header border-0 pt-6">
                         <!--begin::Card title-->
                         <div class="card-title">
-                            Edit Faq
+                            Update  Banner
                         </div>
                         <!--End::Card title-->
                         <!--begin::Card toolbar-->
@@ -65,7 +49,7 @@
                             <!--begin::Toolbar-->
                             <div class="d-flex justify-content-end" data-kt-user-table-toolbar="base">
                                 <!--begin::Add user-->
-                                <a href="{{ route('get.faq.index') }}" class="btn btn-primary">
+                                <a href="{{ route('banners.index') }}" class="btn btn-primary">
                                     Back
                                 </a>
                                 <!--end::Add user-->
@@ -75,7 +59,12 @@
                         <!--end::Card toolbar-->
                     </div>
                     <!--end::Card header-->
-                    {!! Form::open(['route' => 'update.faq', 'method' => 'POST', 'class' => 'w-100 position-relative mb-3']) !!}
+                    {!! Form::open([
+                        'route' => 'banners.update',
+                        'method' => 'POST',
+                        'class' => 'w-100 position-relative mb-3',
+                        'enctype' => 'multipart/form-data',
+                    ]) !!}
                     <!--begin::Card body-->
                     <div class="card-body pt-0">
                         <!--begin::Input group-->
@@ -83,56 +72,15 @@
                             <!--begin::Col-->
                             <div class="col-lg-12 fv-row">
                                 <!--begin::Label-->
-                                <label class="col-lg-12 col-form-label required fw-bold fs-6">Question:</label>
-                                <!--end::Label-->{!! Form::hidden('id', $faq->id) !!}
-                                {!! Form::text('question', $faq->question, [
-                                    'placeholder' => 'Write FAQ Question Here',
-                                    'class' => 'form-control',
-                                ]) !!}
-                            </div>
-                            <!--end::Col-->
-                        </div>
-
-
-                        <!--end::Input group-->
-                        <!--begin::Input group-->
-                        <div class="row">
-                            <!--begin::Col-->
-                            <div class="col-lg-12 fv-row">
-                                <!--begin::Label-->
-                                <label class="col-lg-12 col-form-label required fw-bold fs-6">Answer:</label>
-                                {!! Form::textarea('answer', $faq->answer, [
-                                    'placeholder' => 'Faq Answer Goes here',
-                                    'class' => 'form-control',
-                                    'style' => 'height: 200px;',
-                                ]) !!}
-                                </br>
+                                <label class="col-lg-12 col-form-label required fw-bold fs-6">Update Banner Image:</label>
                                 <!--end::Label-->
+                                {!! Form::text('banner_id',$Banners->id ,[ 'class' => 'form-control']) !!}
+                                {!! Form::file('banner_image', [ 'class' => 'form-control']) !!}
                             </div>
                             <!--end::Col-->
                         </div>
                         <!--end::Input group-->
-                        <!--begin::toogle group-->
-                        <div class="row">
-                            <!--begin::Col-->
-                            <div class="col-lg-12 fv-row d-flex align-items-center">
-                                <!--begin::Label-->
-                                <label class="col-form-label required fw-bold fs-6" for="toggle">Active:</label>
-                                <!--end::Label-->
-
-                                <!--begin::Toggle Button-->
-                                <div class="form-check form-switch">
-                                    <input type="checkbox" id="toggle" class="form-check-input toggle-input"
-                                        value="1" name="is_active">
-                                    <label class="form-check-label toggle-label" for="toggle"></label>
-                                </div>
-                                <!--end::Toggle Button-->
-                            </div>
-                            <!--end::Col-->
-                        </div>
-
-
-                        <!--end::toogle group-->
+                        <!--end::Input group-->
                     </div>
 
                     <!--end::Card body-->
@@ -152,23 +100,8 @@
     <!--end::Content-->
     <script>
         $(document).ready(function() {
-            $("#FaqNav").addClass('show');
-            // $("#addFaq").addClass('active');
+            $("#bannersNav").addClass('show');
+            $("#addbannerNav").addClass('active');
         });
-    </script>
-    <script>
-        const toggle = document.getElementById('toggle');
-        toggle.addEventListener('change', function() {
-            if (this.checked) {
-                this.value = 'true'; // Set the value to 'true' when checked
-            } else {
-                this.value = 'false'; // Set the value to 'false' when unchecked
-            }
-        });
-
-        // Set the initial state based on $faq->is_active
-        const isActive = <?php echo $faq->is_active == 'true' ? 'true' : 'false'; ?>;
-        toggle.checked = isActive;
-        toggle.value = isActive ? 'true' : 'false';
     </script>
 @endsection

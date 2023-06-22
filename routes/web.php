@@ -62,8 +62,12 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/admin/disclaimer}', [App\Http\Controllers\DisclaimerController::class,'index'])->name('disclaimer.index');
     Route::post('/change-and-update/disclaimer}', [App\Http\Controllers\DisclaimerController::class,'storeAndUpdate'])->name('disclaimer.storeAndUpdate');
 
-    Route::get('/admin/banners}', [App\Http\Controllers\BannersController::class,'index'])->name('banners.index');
-    Route::get('/admin/create-banners}', [App\Http\Controllers\BannersController::class,'create'])->name('banners.create');
-    Route::post('/admin/store-banners}', [App\Http\Controllers\BannersController::class,'store'])->name('banners.store');
+    Route::get('/admin/banners', [App\Http\Controllers\BannersController::class,'index'])->name('banners.index');
+    Route::get('/admin/create-banners', [App\Http\Controllers\BannersController::class,'create'])->name('banners.create');
+    Route::post('/admin/store-banners', [App\Http\Controllers\BannersController::class,'store'])->name('banners.store');
+    Route::post('/admin/update-banners', [App\Http\Controllers\BannersController::class,'update'])->name('banners.update');
+    Route::get('/admin/edit-banners{id}', [App\Http\Controllers\BannersController::class,'edit'])->name('banners.edit');
+    Route::get('/delete-banner/{id}', [App\Http\Controllers\BannersController::class, 'destroy'])->name('banners.destroy');
+
 
 });

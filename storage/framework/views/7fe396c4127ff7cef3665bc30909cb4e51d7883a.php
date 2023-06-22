@@ -135,11 +135,16 @@
                                             <tr>
                                                 <td><?php echo e($key + 1); ?></td>
                                                 <td>
-                                                    <img src="<?php echo e(asset('/admin/assets/Banners/'.$banner->image_path )); ?>" width="100"
-                                                        height="100"></td>
+                                                    <img src="<?php echo e(asset('/admin/assets/Banners/' . $banner->image_path)); ?>"
+                                                        width="100" height="100">
+                                                </td>
 
-                                                <td><a href="#" class="badge badge-info mr-2">Edit</a><a href="#"
-                                                        class="ml-2 badge badge-danger">Delete</a></td>
+                                                <td>
+                                                    <a href="<?php echo e(route('banners.edit', $banner->id)); ?>"
+                                                        class="badge badge-info mr-2">Edit</a>
+                                                    <a href="<?php echo e(route('banners.destroy', $banner->id)); ?>"
+                                                        class="ml-2 badge badge-danger">Delete</a>
+                                                </td>
                                             </tr>
                                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                     </tbody>

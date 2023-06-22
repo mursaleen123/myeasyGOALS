@@ -69,7 +69,7 @@
                     </span>
                     <div class="menu-sub menu-sub-accordion menu-active-bg">
                         <div class="menu-item">
-                            <a class="menu-link" id="addbannerNav" href="">
+                            <a class="menu-link" id="addbannerNav" href="{{ route('banners.create') }}">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
