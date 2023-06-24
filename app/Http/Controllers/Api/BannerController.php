@@ -28,7 +28,7 @@ class BannerController extends Controller
 
         $Banners = Banners::all();
         foreach ($Banners as $key => $Banner) {
-            $Banner->update(['image_path' => public_path('/admin/assets/Banners/').$Banner->image_path]);
+            $Banner->update(['image_path' => asset('/admin/assets/Banners/').$Banner->image_path]);
         }
         $data = [
             'Banners' => $Banners,
