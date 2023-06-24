@@ -40,22 +40,43 @@ class AuthController extends Controller
     }
     public function register(Request $request)
     {
-        $attr = $request->validate([
+        $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|unique:users',
             'password' => 'required|string|min:6'
         ]);
 
+        if ($validator->fails()) {
+            $errors = $validator->errors();
+
+            // Custom error messages
+            $customMessages = [
+                'name.required' => 'Please provide a name.',
+                'email.required' => 'Please provide an email address.',
+                'email.email' => 'Please provide a valid email address.',
+                'email.unique' => 'The email address has already been taken.',
+                'password.required' => 'Please provide a password.',
+                'password.min' => 'The password must be at least 6 characters long.',
+            ];
+
+            // Replace default error messages with custom messages
+            $validator->setCustomMessages($customMessages);
+
+            return response()->json([
+                'data' =>  $validator->errors(),
+                'message' => 'Validation failed',
+                'status' => false
+            ], 422);
+        }
+        // Validation passed, create the user
         $user = User::create([
-            'name' => $attr['name'],
-            'password' => bcrypt($attr['password']),
-            'email' => $attr['email']
+            'name' => $request->name,
+            'password' => bcrypt($request->password),
+            'email' => $request->email
         ]);
 
         $tokenResult = $user->createToken('API Token');
         $token = $tokenResult->accessToken;
-
-        // return $this->sendResponse(['token' => $token], true, 'User registered successfully', 200);
 
         return response()->json([
             'data' => ['token' => $token],
@@ -64,37 +85,55 @@ class AuthController extends Controller
         ], 200);
     }
 
+
     public function login(Request $request)
     {
-
-        $attr = $request->validate([
-            'email' => 'required|string|email|',
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|string|email',
             'password' => 'required|string|min:6'
         ]);
-        if (!Auth::attempt($attr)) {
-            // return $this->error('Credentials not match', 401);
+
+        if ($validator->fails()) {
+            $errors = $validator->errors();
+
+            // Custom error messages
+            $customMessages = [
+                'email.required' => 'Please provide an email address.',
+                'email.email' => 'Please provide a valid email address.',
+                'password.required' => 'Please provide a password.',
+                'password.min' => 'The password must be at least 6 characters long.',
+            ];
+
+            // Replace default error messages with custom messages
+            $validator->setCustomMessages($customMessages);
+
+            return response()->json([
+                'data' =>  $validator->errors(),
+                'message' => 'Validation failed',
+                'status' => false
+            ], 422);
+        }
+
+        $credentials = $request->only('email', 'password');
+
+        if (!Auth::attempt($credentials)) {
             return response()->json([
                 'data' => [],
-                'message' => 'Credentials not match',
+                'message' => 'Credentials do not match',
                 'status' => false
             ], 401);
         }
 
-        // dd($request->all());
-
-        // return $this->sendResponse(['token' => auth()->user()->createToken('API Token')->plainTextToken], 'User login successfully');
-
         $tokenResult = auth()->user()->createToken('API Token');
         $token = $tokenResult->accessToken;
 
-        // return $this->sendResponse(['token' => $token], true, 'User registered successfully', 200);
-
         return response()->json([
-            'data' => [ $token],
-            'message' => 'User login successfully',
+            'data' => [$token],
+            'message' => 'User logged in successfully',
             'status' => true
         ], 200);
     }
+
 
     /**
      * Create user
@@ -105,42 +144,7 @@ class AuthController extends Controller
      * @return [string] message
      * @return [int] status
      */
-    public function coachRegister(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'first_name' => 'required|max:50|min:3|regex:/^[a-zA-Z ]*$/',
-            'last_name' => 'required|max:50|min:3|regex:/^[a-zA-Z ]*$/',
-            'email' => 'required||max:50|min:5|email|regex:/^[A-z0-9_.]+[@][A-z0-9_\-]+([.][A-z0-9_\-]+)+[A-z.]{1,4}$/|unique:users,email,NULL,id,deleted_at,NULL',
-            'password' => 'required|min:8|max:20|regex:/^.*(?=.*?[A-Z])(?=(.*[a-z]){1,})(?=(.*[\d]){1,})(?=(.*[\W]){1,})(?!.*\s).{8,}$/|same:confirm_password',
-            'phone' => 'min:10|max:15|regex:/^\+[1-9]\d{10,14}$/', //|unique:users,phone
-        ]);
-        if ($validator->fails()) {
-            $errorString = implode(",", $validator->messages()->all());
-            $errorString = str_replace(',', ' ', $errorString);
-            return $this->responseApi([], false, $errorString, 417);
-        } else {
-            $input = $request->all();
-            $input['password'] = Hash::make($input['password']);
-            $user = User::create($input);
-            $user->assignRole('Coach');
-            $tokenResult = $user->createToken('authToken');
-            $token = $tokenResult->token;
-            $token->save();
-            $user_access_data = [
-                'first_name' => $user->first_name,
-                'last_name' => $user->last_name,
-                'email' => $user->email,
-                "phone" => $user->phone,
-                "school" => $user->school,
-                "sports" => $user->sports,
-                "image" => $user->image ? url($user->image) : '',
-                'token' => $tokenResult->accessToken,
-                'token_type' => 'Bearer',
-                'is_parent' => $user->hasRole('Coach'),
-            ];
-            return $this->responseApi($user_access_data, true, 'Coach registered successfully.', 200);
-        }
-    }
+
 
     /**
      * Login user and create token
@@ -153,44 +157,6 @@ class AuthController extends Controller
      * @return [string] expires_at
      * @return [int] status
      */
-    public function authenticateCoach(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'email' => 'required|max:50|min:5|email',
-            'password' => 'required|min:8|max:20',
-        ]);
-        if ($validator->fails()) {
-            $errorString = implode(",", $validator->messages()->all());
-            $errorString = str_replace(',', ' ', $errorString);
-            return $this->responseApi([], false, $errorString, 417);
-        } else {
-            $credentials = $request->only(["email", "password"]);
-            $user = User::where('email', $credentials['email'])->first();
-            if ($user && $user->hasRole('Coach')) {
-                if (!Auth::attempt($credentials)) {
-                    return $this->responseApi([], false, 'Incorrect email or password', 417);
-                }
-                $tokenResult = $user->createToken('authToken');
-                $token = $tokenResult->token;
-                $token->save();
-                $user_access_data = [
-                    'first_name' => $user->first_name,
-                    'last_name' => $user->last_name,
-                    'email' => $user->email,
-                    "phone" => $user->phone,
-                    "school" => $user->school,
-                    "sports" => $user->sports,
-                    "image" => $user->image ? url($user->image) : '',
-                    'token' => $tokenResult->accessToken,
-                    'token_type' => 'Bearer',
-                    'is_parent' => $user->hasRole('Coach'),
-                ];
-                return $this->responseApi($user_access_data, true, 'Coach Login Successfully', 200);
-            } else {
-                return $this->responseApi([], false, 'Sorry, This coach does not exist', 417);
-            }
-        }
-    }
 
     /**
      * Logout user (Revoke the token)
@@ -198,232 +164,7 @@ class AuthController extends Controller
      * @return [string] message
      * @return [int] status
      */
-    public function logoutCoach(Request $request)
-    {
-        if ($request->user()) {
-            $request->user()->token()->revoke();
-            return $this->responseApi([], true, 'Coach logout successfully', 200);
-        } else {
-            return $this->responseApi([], false, 'Coach token is missing', 401);
-        }
-    }
 
-    /**
-     * Get the authenticated User
-     *
-     * @return [json] data object
-     * @return [string] message
-     * @return [int] status
-     */
-    public function authenticatedCoachData(Request $request)
-    {
-        if ($request->user()) {
-            $user_data = $request->user()->load(['latestMemberSubscription']);
-            if ($user_data && ($user_data->hasRole('Coach') || $user_data->hasRole('Team Member'))) {
-
-                if ($user_data->hasRole('Coach') && $user_data->latestMemberSubscription) {
-                    $user_subscription = $user_data->latestMemberSubscription->product_id;
-                    $user_subscription_expiry = $user_data->latestMemberSubscription->expiry_date;
-                    $subscription_status = true;
-                } else {
-                    $user_subscription = '';
-                    $user_subscription_expiry = '';
-                    $subscription_status = false;
-                }
-                if ($user_data->hasRole('Coach') && $user_data->phone == '+12013702430' || $user_data->phone == '+3354961946' || $user_data->phone == '+14016923048' || $user_data->phone == '+923214250045') {
-                    $user_subscription = 'A005';
-                    $subscription_status = true;
-                }
-                if (!$user_data->hasRole('Coach')) {
-                    $user_subscription = 'A005';
-                    $subscription_status = true;
-                }
-
-                $data = [
-                    'first_name' => $user_data['first_name'] ? $user_data['first_name'] : '',
-                    'last_name' => $user_data['last_name'] ? $user_data['last_name'] : '',
-                    'email' => $user_data['email'] ? $user_data['email'] : '',
-                    "phone" => $user_data['phone'] ? $user_data['phone'] : '',
-                    "sports" => $user_data['sports'] ? $user_data['sports'] : '',
-                    "twitter" => $user_data['twitter'] ? $user_data['twitter'] : '',
-                    "linkedin" => $user_data['linkedin'] ? $user_data['linkedin'] : '',
-                    "school" => $user_data['school']  ? $user_data['school']  : '',
-                    "organization" => $user_data['organization']  ? $user_data['organization']  : '',
-                    "image" => $user_data['image'] ? url($user_data['image']) : '',
-                    'token' => $request->bearerToken(),
-                    'token_type' => 'Bearer',
-                    'is_profile_completed' => $user_data['is_completed'],
-                    'is_parent' => $user_data->hasRole('Coach'),
-                    'user_subscription' => $user_subscription,
-                    'user_subscription_expiry' => $user_subscription_expiry,
-                    'subscription_status' => $subscription_status,
-                ];
-                return $this->responseApi($data, true, 'Coach data retrieved', 200);
-            } else {
-                return $this->responseApi([], false, 'Sorry, This coach does not exist', 417);
-            }
-        } else {
-            return $this->responseApi([], false, 'Coach token is missing', 401);
-        }
-    }
-
-    public function updateCoachData(Request $request)
-    {
-        if ($request->user()) {
-            $user_data = $request->user();
-            if ($user_data && ($user_data->hasRole('Coach') || $user_data->hasRole('Team Member'))) {
-                $input = $request->all();
-                $user_id = $user_data->id;
-                $validator = Validator::make($request->all(), [
-                    'first_name' => 'required|max:50|min:2|regex:/^[a-zA-Z ]*$/',
-                    'last_name' => 'required|max:50|min:2|regex:/^[a-zA-Z ]*$/',
-                    'email' => 'required||max:50|min:5|email|regex:/^[A-z0-9_.]+[@][A-z0-9_\-]+([.][A-z0-9_\-]+)+[A-z.]{1,4}$/|unique:users,email,' . $user_id . ',id,deleted_at,NULL',
-                    'phone' => 'min:10|max:15|regex:/^\+[1-9]\d{10,14}$/|unique:users,phone,' . $user_id . ',id,deleted_at,NULL', //|unique:users,phone
-                    'sports' => 'required|max:50|min:2',
-                    'school' => 'required|max:50|min:2',
-                ], [
-                    'school.required' => 'School/Organization required'
-                ]);
-                if (!empty($request->password)) {
-                    $validator = Validator::make($request->all(), [
-                        'password' => 'required|min:8|max:20|regex:/^.*(?=.*?[A-Z])(?=(.*[a-z]){1,})(?=(.*[\d]){1,})(?=(.*[\W]){1,})(?!.*\s).{8,}$/|same:confirm_password',
-                    ]);
-                    $input['password'] = Hash::make($input['password']);
-                } else {
-                    $input = Arr::except($input, array('password'));
-                    $input = Arr::except($input, array('confirm_password'));
-                }
-
-                if ($validator->fails()) {
-                    $errorString = implode(",", $validator->messages()->all());
-                    $errorString = str_replace(',', ' ', $errorString);
-                    return $this->responseApi([], false, $errorString, 417);
-                } else {
-                    $user = User::find($user_data->id);
-                    $input = Arr::add($input, 'is_completed', 'true');
-
-                    if ($user->update($input)) {
-                        $user_data = User::with('latestMemberSubscription')->find($user_data->id);
-
-                        if ($user_data->hasRole('Coach') && $user_data->latestMemberSubscription) {
-                            $user_subscription = $user_data->latestMemberSubscription->product_id;
-                            $user_subscription_expiry = $user_data->latestMemberSubscription->expiry_date;
-                            $subscription_status = true;
-                        } else {
-                            $user_subscription = '';
-                            $user_subscription_expiry = '';
-                            $subscription_status = false;
-                        }
-
-                        if ($user_data->hasRole('Coach') && $user_data->phone == '+12013702430' || $user_data->phone == '+14016923048' || $user_data->phone == '+923214250045' || $user_data->phone == '+3354961946') {
-                            $user_subscription = 'A005';
-                            $subscription_status = true;
-                        }
-
-                        $data = [
-                            'first_name' => $user_data['first_name'] ? $user_data['first_name'] : '',
-                            'last_name' => $user_data['last_name'] ? $user_data['last_name'] : '',
-                            'email' => $user_data['email'] ? $user_data['email'] : '',
-                            "phone" => $user_data['phone'] ? $user_data['phone'] : '',
-                            "school" => $user_data['school'] ? $user_data['school'] : '',
-                            "sports" => $user_data['sports'] ? $user_data['sports'] : '',
-                            "twitter" => $user_data['twitter'] ? $user_data['twitter'] : '',
-                            "linkedin" => $user_data['linkedin'] ? $user_data['linkedin'] : '',
-                            "organization" => $user_data['organization']  ? $user_data['organization']  : '',
-                            "image" => $user_data['image'] ? url($user_data['image']) : '',
-                            'token' => $request->bearerToken(),
-                            'token_type' => 'Bearer',
-                            'is_profile_completed' => $user_data['is_completed'],
-                            'is_parent' => $user_data->hasRole('Coach'),
-                            'user_subscription' => $user_subscription,
-                            'user_subscription_expiry' => $user_subscription_expiry,
-                            'subscription_status' => $subscription_status,
-                        ];
-                        return $this->responseApi($data, true, 'Your Profile has been updated successfully.', 200);
-                    } else {
-                        return $this->responseApi([], false, 'Coach profile not updated', 417);
-                    }
-                }
-            } else {
-                return $this->responseApi([], false, 'Sorry, This coach does not exist', 417);
-            }
-        } else {
-            return $this->responseApi([], false, 'Coach token is missing', 401);
-        }
-    }
-
-    public function updateCoachImageData(Request $request)
-    {
-        $validator = Validator::make(
-            $request->all(),
-            [
-                'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048'
-            ],
-            [
-                'image.image' => 'The type of the uploaded file should be an image.',
-                'image.max' => 'Failed to upload an image. The image maximum size is 2MB.',
-            ]
-        );
-        if ($validator->fails()) {
-            $errorString = implode(",", $validator->messages()->all());
-            $errorString = str_replace(',', ' ', $errorString);
-            return $this->responseApi([], false, $errorString, 417);
-        } else {
-            $user_data = $request->user();
-            if ($request->has('image')) {
-                $image = $request->file('image');
-                $file_name = strtolower($image->getClientOriginalName());
-                $file_name = explode('.', $file_name)[0];
-                $file_name = str_replace(' ', '-', $file_name);
-                $filename = $file_name . '-' . time() . rand(0, 9999) . '.' . $image->getClientOriginalExtension();
-                if ($image->move(public_path() . '/uploads/coaches/', $filename)) {
-                    $image_url = 'uploads/coaches/' . $filename;
-                    User::where('id', $user_data['id'])->update(['image' => $image_url]);
-                    $user_data = User::with('latestMemberSubscription')->find($user_data['id']);
-
-                    if ($user_data->hasRole('Coach') && $user_data->latestMemberSubscription) {
-                        $user_subscription = $user_data->latestMemberSubscription->product_id;
-                        $user_subscription_expiry = $user_data->latestMemberSubscription->expiry_date;
-                        $subscription_status = true;
-                    } else {
-                        $user_subscription = '';
-                        $user_subscription_expiry = '';
-                        $subscription_status = false;
-                    }
-
-                    if ($user_data->hasRole('Coach') && $user_data->phone == '+12013702430' || $user_data->phone == '+14016923048' || $user_data->phone == '+923214250045' || $user_data->phone == '+3354961946') {
-                        $user_subscription = 'A005';
-                        $subscription_status = true;
-                    }
-
-                    $data = [
-                        'first_name' => $user_data['first_name'] ? $user_data['first_name'] : '',
-                        'last_name' => $user_data['last_name'] ? $user_data['last_name'] : '',
-                        'email' => $user_data['email'] ? $user_data['email'] : '',
-                        "phone" => $user_data['phone'] ? $user_data['phone'] : '',
-                        "school" => $user_data['school'] ? $user_data['school'] : '',
-                        "sports" => $user_data['sports'] ? $user_data['sports'] : '',
-                        "twitter" => $user_data['twitter'] ? $user_data['twitter'] : '',
-                        "linkedin" => $user_data['linkedin'] ? $user_data['linkedin'] : '',
-                        "organization" => $user_data['organization']  ? $user_data['organization']  : '',
-                        "image" => $user_data['image'] ? url($user_data['image']) : '',
-                        'token' => $request->bearerToken(),
-                        'token_type' => 'Bearer',
-                        'is_profile_completed' => $user_data['is_completed'],
-                        'is_parent' => $user_data->hasRole('Coach'),
-                        'user_subscription' => $user_subscription,
-                        'user_subscription_expiry' => $user_subscription_expiry,
-                        'subscription_status' => $subscription_status,
-                    ];
-                    return $this->responseApi($data, true, 'Coach image uploaded successfully', 200);
-                } else {
-                    return $this->responseApi([], false, 'Coach image not uploaded', 417);
-                }
-            } else {
-                return $this->responseApi([], false, 'Coach image missing', 417);
-            }
-        }
-    }
 
     public function verifyOtpVerification(Request $request)
     {
