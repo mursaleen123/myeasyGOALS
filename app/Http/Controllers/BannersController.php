@@ -33,6 +33,7 @@ class BannersController extends Controller
             }
         }
 
+
         foreach ($imagePaths as $path) {
             Banners::create(['image_path' => $path]);
         }

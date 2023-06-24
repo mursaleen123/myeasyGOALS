@@ -6,29 +6,18 @@ use App\Http\Controllers\Controller;
 use App\Models\Banners;
 use App\Models\Faqs;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class BannerController extends Controller
 {
     public function FetchBanners(Request $request)
     {
-        // dd(auth()->user());
-        // $this->middleware('auth:api');
-        // $user = $request->user(); // Get the authenticated user
-
-        // if ($user) {
-        //     dd(12);
-        //     // User is logged in
-        //     // You can perform actions for the logged-in user
-        // } else {
-        //     dd('not');
-        //     // User is not logged in
-        //     // You can handle the case where the user is not authenticated
-        // }
-
 
         $Banners = Banners::all();
         foreach ($Banners as $key => $Banner) {
-            $Banner->update(['image_path' => asset('/admin/assets/Banners/').$Banner->image_path]);
+            if (!Str::contains($Banner->image_path, '/admin')) {
+                $Banner->update(['image_path' => asset('/admin/assets/Banners') .'/'. $Banner->image_path]);
+            }
         }
         $data = [
             'Banners' => $Banners,
